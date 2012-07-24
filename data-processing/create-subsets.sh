@@ -39,3 +39,14 @@ echo "creating Judicial Districts shapefile..."
 mkdir -p "$SUB_DIR/$JBASE"
 rm -r $SUB_DIR/$JBASE/*
 ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$JBASE/$JBASE.shp" PG:"$PG_CREDS" -sql "$JQUERY"
+
+
+# Soil and Water Districts
+#######################
+SBASE="vtd2012_soil_water"
+SQUERY="SELECT DISTINCT v.soilwdist, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.soilwdist IS NOT NULL GROUP BY v.soilwdist"
+
+echo "creating Soil and Water Districts shapefile..."
+mkdir -p "$SUB_DIR/$SBASE"
+rm -r $SUB_DIR/$SBASE/*
+ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$SBASE/$SBASE.shp" PG:"$PG_CREDS" -sql "$SQUERY"
