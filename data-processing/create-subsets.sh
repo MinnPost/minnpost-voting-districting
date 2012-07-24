@@ -24,7 +24,18 @@ ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$WBASE/$WBASE.shp" PG:"$PG_CREDS" -sql "$W
 CBASE="vtd2012_county_commissioner"
 CQUERY="SELECT DISTINCT v.countyname, v.ctycomdist, v.countyname || ' ' || v.ctycomdist AS ccd_id, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.ctycomdist IS NOT NULL GROUP BY v.countyname, v.ctycomdist, ccd_id"
 
-echo "creating Count Commissioner shapefile..."
+echo "creating County Commissioner shapefile..."
 mkdir -p "$SUB_DIR/$CBASE"
 rm -r $SUB_DIR/$CBASE/*
 ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$CBASE/$CBASE.shp" PG:"$PG_CREDS" -sql "$CQUERY"
+
+
+# Judicial District
+#######################
+JBASE="vtd2012_judicial_district"
+JQUERY="SELECT DISTINCT v.juddist, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.juddist IS NOT NULL GROUP BY v.juddist"
+
+echo "creating Judicial Districts shapefile..."
+mkdir -p "$SUB_DIR/$JBASE"
+rm -r $SUB_DIR/$JBASE/*
+ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$JBASE/$JBASE.shp" PG:"$PG_CREDS" -sql "$JQUERY"
