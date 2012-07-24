@@ -17,3 +17,14 @@ echo "creating Wards shapefile..."
 mkdir -p "$SUB_DIR/$WBASE"
 rm -r $SUB_DIR/$WBASE/*
 ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$WBASE/$WBASE.shp" PG:"$PG_CREDS" -sql "$WQUERY"
+
+
+# County Commissioners
+#######################
+CBASE="vtd2012_county_commissioner"
+CQUERY="SELECT DISTINCT v.countyname, v.ctycomdist, v.countyname || ' ' || v.ctycomdist AS ccd_id, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.ctycomdist IS NOT NULL GROUP BY v.countyname, v.ctycomdist, ccd_id"
+
+echo "creating Count Commissioner shapefile..."
+mkdir -p "$SUB_DIR/$CBASE"
+rm -r $SUB_DIR/$CBASE/*
+ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$CBASE/$CBASE.shp" PG:"$PG_CREDS" -sql "$CQUERY"
