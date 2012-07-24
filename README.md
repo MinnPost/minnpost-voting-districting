@@ -1,4 +1,9 @@
-minnpost-voting-districting
-===========================
+# Voting Districting
 
-Techniques used to split Minnesota voting precincts into higher level district boundaries.
+Techniques used to split Minnesota voting precincts into higher level district boundaries.  The Minnesota Secretary of State released Voting Precinct data on the MN Legislature site.  The dataset includes higher level boundaries like district courts, but we need to group them together to get new datasets (shapefiles).  This codebase is a simple collection of what was done to make that happen.
+
+Instruction assume a Mac (sorry).
+
+## Import into PostGIS
+
+Install PostGIS with homebrew (a quick search will find you some good instructions).  Make sure to install GDAL with Postgres support.
