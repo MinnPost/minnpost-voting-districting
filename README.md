@@ -10,4 +10,4 @@ Install PostGIS with homebrew (a quick search will find you some good instructio
 
 1. Create a PostGIS database named `minnpost`.
 1. Extract shapefile: `cd data && unzip vtd2012_primary_rev20120720.zip; cd -;` 
-1. Import the shapefile into the database (change `psql` credentials as need): `shp2pgsql -d -I -D -s 26915 data/vtd2012_primary_rev20120720.shp mn_voting_precincts | psql -U postgres -h localhost minnpost`
+1. Import the shapefile into the database (change `psql` credentials as need): `shp2pgsql -d -I -D -s 26915 -g the_geom data/vtd2012_primary_rev20120720.shp mn_voting_precincts | psql -U postgres -h localhost minnpost`
