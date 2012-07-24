@@ -6,4 +6,8 @@ Instruction assume a Mac (sorry).
 
 ## Import into PostGIS
 
-Install PostGIS with homebrew (a quick search will find you some good instructions).  Make sure to install GDAL with Postgres support.
+Install PostGIS with homebrew (a quick search will find you some good instructions).  Make sure to install GDAL with Postgres support.  
+
+1. Create a PostGIS database named `minnpost`.
+1. Extract shapefile: `cd data && unzip vtd2012_primary_rev20120720.zip; cd -;` 
+1. Import the shapefile into the database: ``
