@@ -13,6 +13,8 @@ PG_CREDS="host=localhost user=postgres dbname=minnpost"
 WBASE="vtd2012_wards"
 WQUERY="SELECT DISTINCT v.mcd, v.ward, v.mcd || ' ' || v.ward AS ward_id, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM (SELECT SUBSTRING(pctname FROM '([A-Za-z .]*)[ ]*(- |W-*[0-9]*|W[0-9]*|P-*[0-9]*|P[0-9]*|\([0-9A-Za-z]*\)|$)') AS mcd, ward, the_geom FROM mn_voting_precincts WHERE ward IS NOT NULL) AS v GROUP BY ward_id, v.mcd, v.ward"
 
+WQUERY="SELECT DISTINCT v.mcdname || ' ' || v.ward AS ward_id, v.mcdname, v.ward, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.ward IS NOT NULL GROUP BY ward_id, v.mcdname, v.ward"
+
 echo "creating Wards shapefile..."
 mkdir -p "$SUB_DIR/$WBASE"
 rm -r $SUB_DIR/$WBASE/*
@@ -50,3 +52,14 @@ echo "creating Soil and Water Districts shapefile..."
 mkdir -p "$SUB_DIR/$SBASE"
 rm -r $SUB_DIR/$SBASE/*
 ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$SBASE/$SBASE.shp" PG:"$PG_CREDS" -sql "$SQUERY"
+
+
+# Park Districts (for some reason these are split)
+#######################
+PBASE="vtd2012_park_districts"
+PQUERY="SELECT DISTINCT v.parkdist AS parkd_id, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.parkdist IS NOT NULL GROUP BY v.parkdist"
+
+echo "creating Parks Districts shapefile..."
+mkdir -p "$SUB_DIR/$PBASE"
+rm -r $SUB_DIR/$PBASE/*
+ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$PBASE/$PBASE.shp" PG:"$PG_CREDS" -sql "$PQUERY"
