@@ -57,9 +57,20 @@ ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$SBASE/$SBASE.shp" PG:"$PG_CREDS" -sql "$S
 # Park Districts (for some reason these are split)
 #######################
 PBASE="vtd2012_park_districts"
-PQUERY="SELECT DISTINCT v.parkdist AS parkd_id, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.parkdist IS NOT NULL GROUP BY v.parkdist"
+PQUERY="SELECT DISTINCT v.parkdist, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.parkdist IS NOT NULL GROUP BY v.parkdist"
 
 echo "creating Parks Districts shapefile..."
 mkdir -p "$SUB_DIR/$PBASE"
 rm -r $SUB_DIR/$PBASE/*
 ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$PBASE/$PBASE.shp" PG:"$PG_CREDS" -sql "$PQUERY"
+
+
+# Hospital districts
+#######################
+HBASE="vtd2012_hospital_districts"
+HQUERY="SELECT DISTINCT v.hospdist , ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.hospdist IS NOT NULL GROUP BY v.hospdist"
+
+echo "creating Hospital Districts shapefile..."
+mkdir -p "$SUB_DIR/$HBASE"
+rm -r $SUB_DIR/$HBASE/*
+ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$HBASE/$HBASE.shp" PG:"$PG_CREDS" -sql "$HQUERY"
