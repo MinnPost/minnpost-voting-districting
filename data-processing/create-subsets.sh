@@ -24,7 +24,7 @@ ogr2ogr -f "ESRI Shapefile" "$SUB_DIR/$WBASE/$WBASE.shp" PG:"$PG_CREDS" -sql "$W
 # County Commissioners
 #######################
 CBASE="vtd2012_county_commissioner"
-CQUERY="SELECT DISTINCT v.countyname, v.ctycomdist, v.countyname || ' ' || v.ctycomdist AS ccd_id, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.ctycomdist IS NOT NULL GROUP BY v.countyname, v.ctycomdist, ccd_id"
+CQUERY="SELECT DISTINCT v.countyname, v.countycode, v.ctycomdist, TO_CHAR(v.countycode,  'FM999') || '-' || v.ctycomdist AS ccd_id, ST_Multi(ST_Union(ST_SetSRID(v.the_geom, 26915))) AS the_geom FROM mn_voting_precincts AS v WHERE v.ctycomdist IS NOT NULL GROUP BY v.countyname, v.ctycomdist, v.countycode, ccd_id"
 
 echo "creating County Commissioner shapefile..."
 mkdir -p "$SUB_DIR/$CBASE"
